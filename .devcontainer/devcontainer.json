@@ -1,0 +1,46 @@
+{
+  "name": "Electron Dev Environment",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "runArgs": ["--security-opt", "label=disable"],
+  "workspaceFolder": "/workspace",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "eg2.vscode-npm-script",
+        "ms-vscode.vscode-typescript-tslint-plugin"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "files.autoSave": "onFocusChange",
+        "eslint.format.enable": true,
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        }
+      }
+    }
+  },
+  "postCreateCommand": "npm install",
+  "remoteUser": "developer",
+  "features": {
+    "node": "lts",
+    "git": "latest"
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached"
+  ],
+  "forwardPorts": [3000, 9222],
+  "containerUser": "developer",
+  "remoteEnv": {
+    "ELECTRON_DISABLE_SECURITY_WARNINGS": "true"
+  },
+  "onCreateCommand": "npm install"
+}

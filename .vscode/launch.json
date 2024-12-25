@@ -1,0 +1,106 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Build Main Process",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/webpack",
+      "args": ["--config", "webpack.main.config.js"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "Build Renderer Process",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/webpack",
+      "args": ["--config", "webpack.renderer.config.js"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "Build Entire Project",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/npm",
+      "args": ["run", "build"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Start Electron App",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+      "program": "${workspaceFolder}/dist/main.js",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "ELECTRON_DISABLE_SECURITY_WARNINGS": "true"
+      }
+    },
+    {
+      "name": "Package for macOS",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/electron-builder",
+      "args": ["--mac", "--x64", "--app-version=$npm_package_version"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Package for Windows",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/electron-builder",
+      "args": ["--win", "--x64", "--app-version=$npm_package_version"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Package for Linux",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/electron-builder",
+      "args": ["--linux", "--x64", "--app-version=$npm_package_version"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Link Application (macOS only)",
+      "type": "node",
+      "request": "launch",
+      "program": "/bin/ln",
+      "args": [
+        "-fs",
+        "build/lloop-darwin-x64/lloop.app",
+        "/Applications/lloop.app"
+      ],
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "Build Entire Project"
+    },
+    {
+      "name": "Distribute Application",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/npm",
+      "args": ["run", "distribute"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Prune Dependencies",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/npm",
+      "args": ["prune", "--production"],
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Dependency Check",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/node_modules/.bin/depcheck",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
