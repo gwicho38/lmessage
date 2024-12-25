@@ -8,11 +8,58 @@
     "build-renderer": "webpack --config webpack.renderer.config.js",
     "build": "npm run build-main && npm run build-renderer",
     "start": "electron dist/main.js",
-    "package": "electron-packager dist lloop --platform=darwin --arch=x64 --app-version=0.0.1 --overwrite --icon=lefv_app_icon.icns --ignore=node_modules/electron-packager --out=build",
+    "package-darwin": "electron-builder --mac --x64 --app-version=$npm_package_version",
+    "package-win": "electron-builder --win --x64 --app-version=$npm_package_version",
+    "package-linux": "electron-builder --linux --x64 --app-version=$npm_package_version",
+    "dist": "electron-builder --app-version=$npm_package_version",
     "link": "ln -fs build/lloop-darwin-x64/lloop.app /Applications/lloop.app",
-    "distribute": "npm run build && npm run package && npm run link",
+    "distribute": "npm run build && npm run dist && npm run link",
     "prune": "npm prune --production",
     "dep-check": "depcheck"
+  },
+  "build": {
+    "appId": "com.example.lloop",
+    "productName": "LLoop",
+    "directories": {
+      "output": "build",
+      "buildResources": "resources"
+    },
+    "files": [
+      "dist/**/*",
+      "!node_modules/electron-packager"
+    ],
+    "extraMetadata": {
+      "version": "${npm_package_version}"
+    },
+    "win": {
+      "icon": "resources/lefv_app_icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "mac": {
+      "icon": "resources/lefv_app_icon.icns",
+      "target": [
+        "dmg"
+      ]
+    },
+    "linux": {
+      "icon": "resources/lefv_app_icon.png",
+      "target": [
+        "AppImage"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "artifactName": "${productName}-${version}-setup.${ext}"
+    }
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -32,7 +79,6 @@
     "css-loader": "^7.1.2",
     "electron": "^33.2.0",
     "electron-builder": "^25.1.8",
-    "electron-packager": "^17.1.2",
     "html-webpack-plugin": "^5.6.3",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "^5.3.10",
